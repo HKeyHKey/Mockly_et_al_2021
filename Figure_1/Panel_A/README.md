@@ -1,6 +1,6 @@
 ## Data download: ##
 
-Data downloaded from https://portal.gdc.cancer.gov/exploration on April 29, 2021, selecting "Solid tissue normal" samples with "miRNA-Seq" as an experimental strategy, and "open" as an access option. From the GDC cart, download every information related to that dataset (Biospecimen, Clinical, Sample Sheet, Metadata, and manifest). Manifest for that dataset: 'gdc_manifest_20210429_152630.txt'.
+Data downloaded from https://portal.gdc.cancer.gov/exploration on April 29, 2021, selecting "Solid tissue normal" samples in the "Exploration" tab ([Direct link to Query](https://portal.gdc.cancer.gov/exploration?facetTab=cases&filters=%7B%22op%22%3A%22and%22%2C%22content%22%3A%5B%7B%22op%22%3A%22in%22%2C%22content%22%3A%7B%22field%22%3A%22cases.samples.sample_type%22%2C%22value%22%3A%5B%22solid%20tissue%20normal%22%5D%7D%7D%5D%7D)), then from the "Repository" tab, sub-selecting cases with "miRNA-Seq" as an experimental strategy, and "open" as an access option. Metadata related to that dataset (Biospecimen, Clinical, Sample Sheet, Metadata, and manifest) was downloaded from the GDC portal cart. Manifest for that dataset: 'gdc_manifest_20210429_152630.txt'.
 
 Download:
 
