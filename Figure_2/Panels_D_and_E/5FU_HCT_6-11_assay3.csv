@@ -1,0 +1,34 @@
+											
+----- General Data -----											
+Measurement	Type: EndPoint, Time: 06/11/2020 / 12:06:32, State: Valid Measurement										
+Template	Template loaded during measurement time : c:\programdata\...\luminescence\lumi_1s.par; Modified template adjustments										
+Files	Data file : 5FU_HCT_6-11_assay3.dat - 06/11/2020 / 12:07:49 - Operator was Unknown User - Created with Version 5.17										
+	Template file : C:\ProgramData\...\Lumi_1s.par - 04/07/2013 / 08:57:06 - Created by Unknown User - Created with Version 5.16.01										
+Reader	BertholdTech TriStar, Driver Version: 1.07, (1.0.7.0), S/N: 25-1047, Embedded Version: 1.04										
+	Plate Type: Berthold 96 - No:23300/23302										
+	Name .....................  Measurement										
+	Counting Time [s] ........  1.00                Measurement Mode .........  by Well										
+	Emission Filter ..........  No Filter										
+	Second Measurement .......  No										
+Calculation	Calculation Status : Valid Assay, Calculation Time : 06/11/2020 / 12:07:49										
+Program	MikroWin, Version 5.17; License No. : 115317										
+	Assembly Code A : 0006 0000 0000 0000 0000 FFFF										
+	Assembly Code B : 00E6 F715 C08F FC45 2DC0 B7AF										
+System	Operating System Name : Windows 7 Professional Service Pack 1, 64-bit, System User : commun										
+Printer	Printer Name : \\fuji\fax-rdc										
+											
+----- Threshold Statistics -----											
+Group	Assay	Set	Threshold Limits								
+Group 1	Default	1	+oo > Overload >= 2,1475E9 > #Value >=    0,0000 > _ > -oo								
+											
+											
+											
+06/11/2020	12:06:32										
+0	0	0	0	0	0	0	0	0	0	0	0
+0	359965	330588	392002	309579	207246	107470	59261	36280	19506	9428	0
+0	425804	325704	365982	306824	233235	105159	66187	37879	18674	10655	0
+0	417967	379408	379273	302510	208576	104969	60282	44339	15547	9325	0
+0	350149	360084	323171	323013	208077	148888	107993	82067	62783	39731	0
+0	349540	308415	329836	312500	247294	147138	101597	87276	71056	37958	0
+0	264631	300744	334452	299541	207507	143133	88622	76850	69180	35338	0
+0	0	0	0	0	0	0	0	0	0	0	0
