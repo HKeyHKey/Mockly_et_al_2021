@@ -1,0 +1,97 @@
+args=commandArgs(trailingOnly=TRUE)
+
+data=read.csv(args[1],header=T,sep='\t')
+
+### Below: if you want to analyze only "high-confidence" miRNAs:
+#data=subset(data,data$Confidence=='high_confidence')
+### Above: if you want to analyze only "high-confidence" miRNAs
+
+description=paste(data$Cancer.type,' (',data$Cancer.localization,')',sep='')
+
+miRNA_list=data$miRNA
+### Below: unifying hairpin list (if the miR-5p and the miR-3p appear in the list, that hairpin should appear only once):
+unified_hairpin_list=c()
+for (name in unique(miRNA_list))
+{
+if (length(grep('-3p$',name))==1)
+{
+peeled=sub('-3p$','',name)
+if (length(grep(paste(peeled,'-5p',sep=''),unique(miRNA_list)))==0)
+{
+unified_hairpin_list=append(unified_hairpin_list,name)
+}
+} else
+if (length(grep('-5p$',name))==1)
+{
+peeled=sub('-5p$','',name)
+unified_hairpin_list=append(unified_hairpin_list,name)
+} else unified_hairpin_list=append(unified_hairpin_list,name)
+}
+#unified_hairpin_list=sub('miR','mir',unified_hairpin_list)
+### Above: unifying hairpin list (if the miR-5p and the miR-3p appear in the list, that hairpin should appear only once)
+
+
+miR34_family=c('hsa-miR-449a','hsa-miR-449b-5p','hsa-miR-449c-5p','hsa-miR-34a-5p','hsa-miR-34b-5p','hsa-miR-34c-5p')
+
+percent_data_hairpin=c()
+percent_data_mature=c()
+percent_data_seed=c()
+
+for (desc in unique(description))
+{
+add_hairpin=c();add_mature=c();add_seed=c()
+for (miRNA in unified_hairpin_list)
+{
+add_hairpin=append(add_hairpin,data$Recorded.variations.in.hairpin[description==desc & miRNA_list==miRNA]/data$Number.of.cases.for.that.cancer.type.and.localization[description==desc][1]*100)
+}
+for (miRNA in unique(miRNA_list))
+{
+add_mature=append(add_mature,data$Recorded.variations.in.mature.miRNA[description==desc & miRNA_list==miRNA]/data$Number.of.cases.for.that.cancer.type.and.localization[description==desc][1]*100)
+add_seed=append(add_seed,data$Recorded.variations.in.seed[description==desc & miRNA_list==miRNA]/data$Number.of.cases.for.that.cancer.type.and.localization[description==desc][1]*100)
+}
+percent_data_hairpin=rbind(percent_data_hairpin,add_hairpin)
+percent_data_mature=rbind(percent_data_mature,add_mature)
+percent_data_seed=rbind(percent_data_seed,add_seed)
+}
+colnames(percent_data_hairpin)=sub('miR','mir',sub('-3p$','',sub('-5p$','',unified_hairpin_list)))
+rownames(percent_data_hairpin)=unique(description)
+colnames(percent_data_mature)=unique(miRNA_list)
+rownames(percent_data_mature)=unique(description)
+colnames(percent_data_seed)=unique(miRNA_list)
+rownames(percent_data_seed)=unique(description)
+
+colfunc <- colorRampPalette(c("lightblue", "red"))
+library(gplots)
+
+pdf('Heatmap_hairpins.pdf',width=10,height=10)
+out=heatmap.2(percent_data_hairpin,col=colfunc(15))
+dev.off()
+
+for (name in miR34_family)
+{
+print(name)
+print(c(1:length(unified_hairpin_list))[unified_hairpin_list[out$colInd]==name])
+}
+write.csv(percent_data_hairpin[rev(out$rowInd),out$colInd],'Data_for_SNP_hairpin_heatmap.csv')
+
+pdf('Heatmap_mature.pdf',width=10,height=10)
+out=heatmap.2(percent_data_mature,col=colfunc(15))
+dev.off()
+
+for (name in miR34_family)
+{
+print(name)
+print(c(1:length(unique(miRNA_list)))[(unique(miRNA_list))[out$colInd]==name])
+}
+write.csv(percent_data_mature[rev(out$rowInd),out$colInd],'Data_for_SNP_mature_heatmap.csv')
+
+pdf('Heatmap_seed.pdf',width=10,height=10)
+out=heatmap.2(percent_data_seed,col=colfunc(15))
+dev.off()
+
+for (name in miR34_family)
+{
+print(name)
+print(c(1:length(unique(miRNA_list)))[(unique(miRNA_list))[out$colInd]==name])
+}
+write.csv(percent_data_seed[rev(out$rowInd),out$colInd],'Data_for_SNP_seed_heatmap.csv')
