@@ -5,3 +5,17 @@ Data downloaded from https://portal.gdc.cancer.gov/exploration on February 24, 2
 Download:
 
 ``gdc-client download -m gdc_manifest.2021-02-24.txt``
+
+Data download from miRBase v.21 (which is the miRBase version used by GDC as of April 29, 2021):
+
+``wget ftp://mirbase.org/pub/mirbase/21/high_conf_hairpin.fa.gz;wget ftp://mirbase.org/pub/mirbase/21/high_conf_mature.fa.gz;gunzip high_conf_hairpin.fa.gz high_conf_mature.fa.gz;mv high_conf_hairpin.fa hairpin_high_conf.fa;mv high_conf_mature.fa mature_high_conf.fa;wget ftp://mirbase.org/pub/mirbase/21/genomes/hsa.gff3``
+
+## Data processing: ##
+
+``./Module_GDC_cancer_simple_nucleotide_variation_in_miRNAs.pl clinical.tsv gdc_sample_sheet.2021-02-24.tsv 100``
+
+Resulting file: 'Observed_cancer_simple_nucleotide_variation_in_hsa_miRNAs_cutoff_100.tsv' (available here in bzip2-compressed form).
+
+## Heatmap tracing: ##
+
+``Rscript R_commands_heatmap_cancer_variation_density_in_miRNAs Observed_cancer_simple_nucleotide_variation_in_hsa_miRNAs_cutoff_100.tsv``
