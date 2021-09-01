@@ -1,0 +1,65 @@
+data=read.csv('Observed_cancer_copy_number_variation_in_hsa_miRNAs.tsv',sep='\t',skip=1)
+
+CUTOFF=100 # minimal number of cases with determined ploidy for a cancer type+localization to be considered
+
+select_cancers=c()
+select_percent=c()
+
+for (col_index in 3:ncol(data))
+{
+type=colnames(data)[col_index]
+split=strsplit(as.character(gsub('/$','/0',as.character(data[,col_index]))),'/')
+tot=c()
+percent=c()
+for (i in 1:length(split))
+{
+x=as.numeric(split[[i]])
+x[is.na(x)]=0
+tot=append(tot,sum(x[2:4]))
+}
+if (max(tot)>=CUTOFF)
+{
+for (i in 1:length(split))
+{
+x=as.numeric(split[[i]])
+x[is.na(x)]=0
+percent=append(percent,x[3]/sum(x[2:4])*100)
+}
+select_cancers=append(select_cancers,type)
+select_percent=cbind(select_percent,percent)
+}
+}
+
+### Below: exclusion of miRNAs whose ploidy could not be assessed (no "gain", "loss" or "diploid" observations, only "ND"'s):
+m=apply(select_percent,1,max)
+select=c(1:length(m))[!is.nan(m)]
+select_percent=select_percent[select,]
+### Above: exclusion of miRNAs whose ploidy could not be assessed (no "gain", "loss" or "diploid" observations, only "ND"'s)
+
+rownames(select_percent)=data$miRNA[select]
+colnames(select_percent)=select_cancers
+
+
+colfunc <- colorRampPalette(c("lightblue", "red"))
+library(gplots)
+
+pdf('Heatmap_copy_number.pdf',width=10,height=10)
+out=heatmap.2(t(select_percent),col=colfunc(15))
+dev.off()
+
+miR34_family=c('mir-449a','mir-449b','mir-449c','mir-34a','mir-34b','mir-34c')
+
+for (name in miR34_family)
+{
+print(name)
+print(grep(name,data$miRNA[select][out$colInd]))
+}
+
+### Below: outputting table with numeric values of the heatmap:
+ordered_data=t(select_percent[out$colInd,rev(out$rowInd)])
+write.csv(ordered_data,'Data_for_copy_number_heatmap.csv')
+
+### Below: outputting table with the most frequently deleted miRNA genes in cancer (criterion: deleted in more than 90% of prostate adenocarcinoma: that seems to be the best criterion according to the heatmap):
+sink('Frequently_deleted_miRNA_genes.txt')
+print(colnames(ordered_data)[ordered_data[19,]>90])
+sink()
