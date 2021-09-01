@@ -6,9 +6,9 @@ Data downloaded from https://portal.gdc.cancer.gov/repository on March 4, 2021, 
 
 Metadata download from the GDC portal cart: clinical data and Sample sheeet saved as 'clinical.tsv' and 'gdc_sample_sheet.2021-03-04.tsv' respectively.
 
-High-confidence miRNA hairpin data downloaded from [miRBase](https://www.mirbase.org/) v.22:
+High-confidence miRNA hairpin data downloaded from [miRBase](https://www.mirbase.org/) v.22.1:
 
-``wget ftp://mirbase.org/pub/mirbase/22/hairpin_high_conf.fa.gz;mv hairpin_high_conf.fa.gz high_conf_hairpin.fa.gz;gunzip high_conf_hairpin.fa.gz``
+``wget ftp://mirbase.org/pub/mirbase/22.1/hairpin_high_conf.fa.gz;gunzip hairpin_high_conf.fa.gz``
 
 
 ## Data correction: ##
