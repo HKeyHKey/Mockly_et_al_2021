@@ -6,7 +6,7 @@ Download:
 
 ``gdc-client download -m gdc_manifest.2021-02-24.txt``
 
-Data download from miRBase v.21 (which is the miRBase version used by GDC as of April 29, 2021):
+Data download from [miRBase](https://www.mirbase.org/) v.21 (which is the miRBase version used by GDC as of April 29, 2021):
 
 ``wget ftp://mirbase.org/pub/mirbase/21/high_conf_hairpin.fa.gz;wget ftp://mirbase.org/pub/mirbase/21/high_conf_mature.fa.gz;gunzip high_conf_hairpin.fa.gz high_conf_mature.fa.gz;mv high_conf_hairpin.fa hairpin_high_conf.fa;mv high_conf_mature.fa mature_high_conf.fa;wget ftp://mirbase.org/pub/mirbase/21/genomes/hsa.gff3``
 
