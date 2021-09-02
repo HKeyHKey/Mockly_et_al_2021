@@ -1,0 +1,103 @@
+args <- commandArgs(TRUE)
+
+data=read.csv(paste('miRNA_expression_data_',args[1],'_p53_mutation.tsv',sep=''),sep='\t')
+CUTOFF=10 # minimal number of cases for a cancer type to be plotted on the heatmap
+
+miRNA_list=unique(data$miRNA)
+nb_miRNAs=length(miRNA_list)
+
+
+type_list=c()
+case_number=c()
+all_pval=c()
+all_fc=c()
+for (cancer_type in unique(data$Case.description))
+{
+if ((length(unique(data$Case[as.character(data$Case.description)==as.character(cancer_type) & data$Sample.description=='Primary Tumor']))>=CUTOFF) & (length(unique(data$Case[as.character(data$Case.description)==as.character(cancer_type) & data$Sample.description=='Primary Tumor']))>=CUTOFF)) # only cancer types for which at least CUTOFF samples are available both for "Solid Tissue Normal" and "Primary Tumor" may have at least CUTOFF matched pairs of normal solid tissue and primary tumor.
+{
+type_list=append(type_list,cancer_type)
+peeled=subset(data,as.character(data$Case.description)==as.character(cancer_type))
+#attach(subset(data,as.character(data$Case.description)==as.character(cancer_type)))
+normal=c()
+cancer=c()
+count_case=0
+for (case in unique(peeled$Case))
+{
+if ((length(unique(peeled$Sample.ID[peeled$Case==case & peeled$Sample.description=='Solid Tissue Normal']))>0) & (length(unique(peeled$Sample.ID[peeled$Case==case & peeled$Sample.description=='Primary Tumor']))>0)) # selects cases for which both types of tissue (normal and tumor) are available
+{
+   count_case=count_case+1
+   add_normal=c()
+   add_cancer=c()
+   for (sample in unique(peeled$Sample.ID[peeled$Case==case & peeled$Sample.description=='Solid Tissue Normal']))
+   {
+### Below: average miRNA abundances across the (potentially several) instances of that sample:
+   extract=subset(data,Sample.ID==sample)$miRNA.rpm
+   add_normal=cbind(add_normal,apply(array(extract,dim=c(nb_miRNAs,length(extract)/nb_miRNAs)),1,mean))
+   }
+   for (sample in unique(peeled$Sample.ID[peeled$Case==case & peeled$Sample.description=='Primary Tumor']))
+   {
+### Below: average miRNA abundances across the (potentially several) instances of that sample:
+   extract=subset(data,Sample.ID==sample)$miRNA.rpm
+   add_cancer=cbind(add_cancer,apply(array(extract,dim=c(nb_miRNAs,length(extract)/nb_miRNAs)),1,mean))
+   }
+   normal=cbind(normal,apply(add_normal,1,mean))
+   cancer=cbind(cancer,apply(add_cancer,1,mean))
+}
+}
+
+case_number=append(case_number,count_case)
+if (count_case>=CUTOFF)
+{
+pval=c()
+fc=c()
+for (i in 1:nrow(normal))
+{
+   pval=append(pval,wilcox.test(normal[i,],cancer[i,],paired=T)$p.value)
+   fc=append(fc,median(sort(cancer[i,]/normal[i,])))
+}
+all_pval=cbind(all_pval,pval)
+all_fc=cbind(all_fc,fc)
+}
+}
+}
+
+
+rownames(all_pval)=miRNA_list
+rownames(all_fc)=miRNA_list
+colnames(all_pval)=type_list[case_number>=CUTOFF]
+colnames(all_fc)=type_list[case_number>=CUTOFF]
+
+peeled_pval=t(all_pval)
+peeled_fc=t(all_fc)
+
+rownames(peeled_pval)=type_list[case_number>=CUTOFF]
+rownames(peeled_fc)=type_list[case_number>=CUTOFF]
+colnames(peeled_pval)=miRNA_list
+colnames(peeled_fc)=miRNA_list
+
+### Below: elimination of miRNAs with 0-variance:
+peeled_pval=peeled_pval[,c(1:ncol(peeled_fc))[!is.na(apply(peeled_fc,2,sd))]]
+peeled_fc=peeled_fc[,c(1:ncol(peeled_fc))[!is.na(apply(peeled_fc,2,sd))]]
+
+### Below: correction for multiple hypothesis testing
+adjusted_pval=array(p.adjust(peeled_pval,method='fdr'),dim=dim(peeled_pval))
+
+
+### Below: roofing log(fc); non-significant changes set to white
+display=log(peeled_fc)
+roof=max(pretty(c(0,max(abs(range(display[is.finite(display)]))))))
+display[display==-Inf]=-roof
+display[display==Inf]=roof
+display[adjusted_pval>=0.05]=0
+rownames(adjusted_pval)=rownames(display)
+colnames(adjusted_pval)=colnames(display)
+
+colfunc <- colorRampPalette(c("blue","white","red"))
+library(gplots)
+
+pdf(paste('Heatmap_miRNA_expression_',args[1],'_p53_mutation.pdf',sep=''),width=10,height=10)
+out=heatmap.2(display,col=colfunc(15))
+dev.off()
+
+write.csv(display[rev(out$rowInd),out$colInd],paste('Data_for_miRNA_expression_heatmap_',args[1],'_p53_mutation.csv',sep=''))
+write.csv(adjusted_pval[rev(out$rowInd),out$colInd],paste('p-val_for_miRNA_expression_heatmap_',args[1],'_p53_mutation.csv',sep=''))
