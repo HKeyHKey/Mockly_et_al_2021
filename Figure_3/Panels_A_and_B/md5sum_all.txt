@@ -1,0 +1,8 @@
+76ed5b86991899ff2c0b808bcfc7aa65  HAP1KO_R2reverse_S4_L001_R2_001.fastq.gz
+585a851aaf19f029881c35dce793329f  HAP1WT_R2Reverse_S3_L001_R2_001.fastq.gz
+d203e290037800f9fa441141eb22fcd7  HCT-116KO_R2reverse_S2_L001_R2_001.fastq.gz
+e82a5661ca46697bed0af973e613bed5  HCT-116WT_R2reverse_S1_L001_R2_001.fastq.gz
+a5e2ac81e6a1b7f2a44733475ae28d34  HAP1KO_R2reverse_cutadapt.fastq.gz
+1d2a7c736e77f8d0f3177af46bbcf83f  HAP1WT_R2Reverse_cutadapt.fastq.gz
+12cd453a54755092cf61d121bea9796e  HCT-116KO_R2reverse_cutadapt.fastq.gz
+2f15dde921dcf29b3b75fca6ea29d57b  HCT-116WT_R2reverse_cutadapt.fastq.gz
