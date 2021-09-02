@@ -1,0 +1,85 @@
+data=read.csv('miRNA_expression_data_with_tumor_grade.tsv',sep='\t')
+CUTOFF=10 # minimal number of cases for a cancer type to be plotted
+
+library(plotrix)
+
+miRNA_list=unique(data$miRNA)
+nb_miRNAs=length(miRNA_list)
+miR34a_index=c(1:length(miRNA_list))[miRNA_list=='hsa-miR-34a-5p']
+
+roof=8 # will set log(fold-changes) larger than roof to roof, and smaller than -roof to -roof
+
+type_list=c()
+all_pval=c()
+all_fc=c()
+for (cancer_type in unique(data$Case.description))
+{
+if ((length(unique(data$Case[as.character(data$Case.description)==as.character(cancer_type) & data$Sample.description=='Primary Tumor']))>=CUTOFF) & (length(unique(data$Case[as.character(data$Case.description)==as.character(cancer_type) & data$Sample.description=='Primary Tumor']))>=CUTOFF)) # only cancer types for which at least CUTOFF samples are available both for "Solid Tissue Normal" and "Primary Tumor" may have at least CUTOFF matched pairs of normal solid tissue and primary tumor.
+{
+type_list=append(type_list,cancer_type)
+peeled=subset(data,as.character(data$Case.description)==as.character(cancer_type))
+#attach(subset(data,as.character(data$Case.description)==as.character(cancer_type)))
+normal=c()
+cancer=c()
+count_case=0
+grades=c()
+for (case in unique(peeled$Case))
+{
+if ((length(unique(peeled$Sample.ID[peeled$Case==case & peeled$Sample.description=='Solid Tissue Normal']))>0) & (length(unique(peeled$Sample.ID[peeled$Case==case & peeled$Sample.description=='Primary Tumor']))>0)) # selects cases for which both types of tissue (normal and tumor) are available
+{
+   count_case=count_case+1
+   grades=append(grades,as.character(peeled$Tumor.grade[peeled$Case==case][1]))
+   add_normal=c()
+   add_cancer=c()
+   for (sample in unique(peeled$Sample.ID[peeled$Case==case & peeled$Sample.description=='Solid Tissue Normal']))
+   {
+### Below: average miRNA abundances across the (potentially several) instances of that sample:
+   extract=subset(data,Sample.ID==sample)$miRNA.rpm
+   add_normal=cbind(add_normal,apply(array(extract,dim=c(nb_miRNAs,length(extract)/nb_miRNAs)),1,mean))
+   }
+   for (sample in unique(peeled$Sample.ID[peeled$Case==case & peeled$Sample.description=='Primary Tumor']))
+   {
+### Below: average miRNA abundances across the (potentially several) instances of that sample:
+   extract=subset(data,Sample.ID==sample)$miRNA.rpm
+   add_cancer=cbind(add_cancer,apply(array(extract,dim=c(nb_miRNAs,length(extract)/nb_miRNAs)),1,mean))
+   }
+   normal=cbind(normal,apply(add_normal,1,mean))
+   cancer=cbind(cancer,apply(add_cancer,1,mean))
+}
+}
+
+if (count_case>=CUTOFF)
+{
+pdf(paste('Grade-stratified_miRNA_expression_in_tumor_vs_NAT_',cancer_type,'.pdf',sep=''),width=6,height=5)
+plot(1,1,xlim=c(0.5,4.5),ylim=c(-roof,roof),ty='n',xlab='Tumor grade',ylab='log(abundance in cancer / in normal tissue)',main=cancer_type,axes=F)
+for (g in c(1:4))
+{
+for_that_grade=log(cancer[,c(1:length(grades))[grades==paste('G',g,sep='')]]/normal[,c(1:length(grades))[grades==paste('G',g,sep='')]])
+if (length(ncol(for_that_grade))==1)
+{
+m=apply(for_that_grade,1,mean)
+s=apply(for_that_grade,1,std.error)
+} else # if there is 0 or 1 case for that cancer_type and that grade
+{
+m=for_that_grade
+s=rep(0,length(for_that_grade))
+}
+m[m<-roof]=-roof
+m[m>roof]=roof
+
+par(new=T)
+plotCI(rep(g,(length(miRNA_list)-1)),m[-miR34a_index],s[-miR34a_index],xlim=c(0.5,4.5),ylim=c(-roof,roof),xlab='',ylab='',axes=F)
+par(new=T)
+plotCI(g,m[miR34a_index],s[miR34a_index],col='red',xlim=c(0.5,4.5),ylim=c(-roof,roof),xlab='',ylab='',axes=F)
+}
+counts_per_grade=c()
+for (g in c(1:4))
+{
+counts_per_grade=append(counts_per_grade,paste('G',g,'\n(n=',length(grades[grades==paste('G',g,sep='')]),')',sep=''))
+}
+axis(1,labels=counts_per_grade,at=c(1:4),mgp = c(1, 1.5, 0))
+axis(2)
+dev.off()
+}
+}
+}
