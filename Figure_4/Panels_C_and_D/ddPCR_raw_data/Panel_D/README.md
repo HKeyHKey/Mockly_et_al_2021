@@ -1,1 +1,1 @@
-"Main_dataset": PCR failed in two wells ("control 72h replicate 3, quantification of miR-34" and "control 72h replicate 3, quantification of miR-21"). They were re-done in a separate experiment, whose data are in "Re-done_missing_replicate".
+"Main_dataset": PCR failed in two wells ("control 72h replicate 3, quantification of miR-34" and "control 72h replicate 3, quantification of miR-21"). They were re-done in a separate experiment (both RT and ddPCR were re-done), whose data are in "Re-done_missing_replicate".
