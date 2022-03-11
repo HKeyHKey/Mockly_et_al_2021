@@ -1,0 +1,58 @@
+depths=read.table('Depths.dat',header=T)
+
+args = commandArgs(trailingOnly=TRUE)
+
+tissue=args[1]
+all_data=list()
+count=1
+for (lib in args[2:length(args)])
+{
+data=read.table(paste('miRNA_count_in_Mapping_',lib,'.dat',sep=''),header=T)
+all_data[[count]]=as.character(data$miRNA[grep('-[35]p',data$miRNA)])
+count=count+1
+all_data[[count]]=data$Number_of_reads[grep('-[35]p',data$miRNA)]/depths$Number_of_genomic_reads[depths==lib]*1e6
+count=count+1
+}
+
+
+ified_miRNA_names=c()
+for (i in 1:floor(count/2))
+ified_miRNA_names=append(ified_miRNA_names,all_data[[2*(i-1)+1]])
+unified_miRNA_names=unique(ified_miRNA_names)
+
+ppm=c()
+for (name in unified_miRNA_names)
+{
+repl=c()
+for (i in 1:floor(count/2))
+{
+x=all_data[[2*i]][all_data[[2*(i-1)+1]]==name]
+if (length(x)==0) x=0
+repl=append(repl,x)
+}
+ppm=append(ppm,mean(repl))
+}
+
+pdf(paste('miRNA_abundances_in_',tissue,'.pdf',sep=''),width=8,height=5)
+plot(1,1,xlim=c(0,1.1*sum(ppm)),ylim=c(0,1),type='n',xlab='',ylab='',axes=F,main=tissue)
+x=0
+color='black'
+for (name in unified_miRNA_names[order(ppm)])
+{
+if (color=='black') next_color='lightgray'
+if (color=='lightgray') next_color='black'
+if (length(grep('mir-34[abc]-5p',name))>0) color='red'
+if (length(grep('mir-449[abc]-5p',name))>0) color='blue'
+rect(x,0.3,x+ppm[unified_miRNA_names==name],0.7,border=color,col=color)
+if ((color!='black') & (color!='lightgray'))
+{
+absc=mean(c(x,x+ppm[unified_miRNA_names==name]))
+arrows(absc,0.8,absc,0.75,length=0.1,angle=30,col=color)
+text(absc,0.85,paste(name,' (',signif(ppm[unified_miRNA_names==name],digits=6),')',sep=''),col=color)
+}
+x=x+ppm[unified_miRNA_names==name]
+color=next_color
+}
+text(mean(c(x,x-ppm[unified_miRNA_names==name])),0.8,name)
+text(mean(c(x,x-ppm[unified_miRNA_names==name])),0.1,round(ppm[unified_miRNA_names==name]))
+dev.off()
