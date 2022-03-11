@@ -1,0 +1,25 @@
+plate <- read.csv("20210412_mimic_HCT116_miR34a_for_analysis.csv", header = T, sep = ';',dec=",",stringsAsFactors = F)
+sample_name=c(rep(c("ctrl-1h-r1","ctrl-1h-r2","ctrl-1h-r3","ctrl-24h-r1","ctrl-24h-r2","ctrl-24h-r3",
+                    "1nM-1h-r1","1nM-1h-r2","1nM-1h-r3","1nM-24h-r1","1nM-24h-r2","1nM-24h-r3",
+                    "10nM-1h-r1","10nM-1h-r2","10nM-1h-r3","10nM-24h-r1","10nM-24h-r2","10nM-24h-r3"),2))
+target_miRNA=c(rep("miR-34a",18),rep("miR-21",18))
+coeff_dilution=c(rep(1,6),rep(100,6),rep(1000,6),rep(10,18)) 
+#Reverse-transcription reactions were diluted to 1/100 for miR-34a quantification of samples transfected with 1 nM miR-34a duplex,
+#to 1/1000 for miR-34a quantification of samples transfected with 10 nM miR-34a duplex,
+#and to 1/10 for miR-21 quantification of all samples.
+ng_RT=rep(10,36) #Reverse-transcription reactions were performed with 10 ng total RNA in final volume of 15 µL.
+volume_RT=15
+volume_RT_for_ddPCR=1.33 #ddPCR quantifications were performed from 1.33 µL reverse-transcription reactions.
+
+table=as.data.frame(cbind(plate$Well,sample_name,target_miRNA,coeff_dilution,ng_RT,plate$Copies.20µLWell),stringsAsFactors = F)
+colnames(table)=c("well","sample","target_miRNA","dilution","ng_RT","copies_per_well")
+table$copies_per_ng = as.numeric(table$copies_per_well)/(((volume_RT_for_ddPCR*as.numeric(table$ng_RT))/volume_RT)/as.numeric(table$dilution))
+
+transfected_dose=as.numeric(sub('nM','',sub('ctrl','0nM',sub('-.*','',table$sample))))
+time_point=as.numeric(sub('.*-','',sub('h-r[0-9]','',table$sample)))
+for (miRNA in c("miR-34a","miR-21"))
+{
+print(paste(miRNA,":",sep=''))
+print(summary(aov(table$copies_per_ng[table$target_miRNA==miRNA]~transfected_dose[table$target_miRNA==miRNA]+time_point[table$target_miRNA==miRNA])))
+}
+
