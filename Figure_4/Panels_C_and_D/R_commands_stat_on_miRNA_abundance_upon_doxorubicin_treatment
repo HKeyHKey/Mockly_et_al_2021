@@ -1,0 +1,81 @@
+library(car)
+
+data=read.csv('20210411_dox_HCT116_miR34a_miR21_for_analysis.csv',sep=';',dec=',')
+map=read.csv('Map_20210411_dox_HCT116_miR34a_miR21_for_analysis.csv',header=F)
+
+### Below: because the "untreated 72h replicate 3" sample was lost in the initial experiment (both for miR-34a and miR-21 quantification), it was re-analyzed separately. And because the ddPCR system requires full collumns of 8 samples, each of these 2 cDNAs was PCR'ed in 4 technical replicates (we will average them):
+data2=read.csv('20210416_dox_HCT116_miR34a_miR21_for_analysis.csv',sep=';',dec=',')
+map2=read.csv('Map_20210416_dox_HCT116_miR34a_miR21_for_analysis.csv',sep=,header=F)
+
+
+treatment=c()
+duration=c()
+miRNA=c()
+dilution=c()
+abundance=c()
+replicate=c()
+for (well in map$V1)
+{
+treatment=append(treatment,strsplit(as.character(map$V2[map$V1==well]),' ')[[1]][1])
+duration=append(duration,strsplit(as.character(map$V2[map$V1==well]),' ')[[1]][2])
+miRNA=append(miRNA,strsplit(as.character(map$V2[map$V1==well]),' ')[[1]][4])
+dilution=append(dilution,as.numeric(sub('^1/','',sub('X$','',strsplit(as.character(map$V2[map$V1==well]),' ')[[1]][5]))))
+replicate=append(replicate,strsplit(as.character(map$V2[map$V1==well]),' ')[[1]][3])
+abundance=append(abundance,data$Copies.20µLWell[data$Well==well])
+}
+
+
+### Below: completion with the re-RT-ddPCR on the two missing samples:
+for (descr in as.character(unique(unique(map2$V2))))
+{
+all_tech_rep=c()
+for (well in map2$V1[map2$V2==descr])
+all_tech_rep=append(all_tech_rep,data2$Copies.20µLWell[data2$Well==well])
+miR=strsplit(descr,' ')[[1]][4]
+dur=strsplit(descr,' ')[[1]][2]
+tr=strsplit(descr,' ')[[1]][1]
+dil=as.numeric(sub('^1/','',sub('X$','',strsplit(descr,' ')[[1]][5])))
+rep=strsplit(descr,' ')[[1]][3]
+abundance[treatment==tr & duration==dur & miRNA==miR & replicate==rep]=mean(all_tech_rep)
+}
+
+
+
+abundance=abundance*15/1.33*dilution/10 # PCR was done with 1.33 μL cDNA (out of a 15 μL RT reaction, performed on 10 ng RNA): this updated "abundance" is the number of RNA molecules per ng of total RNA
+duration=as.numeric(sub('h$','',duration)) # to convert that factor into a scalar (anyway here it won't matter, because there are only two time points)
+summary(aov(abundance~miRNA+treatment+duration))
+for (miR in unique(miRNA))
+{
+print(miR)
+print(summary(aov(abundance[miRNA==miR]~treatment[miRNA==miR]+duration[miRNA==miR])))
+print('Post-hoc tests:');print('');print('Normality of distribution:')
+for (dur in unique(duration))
+{
+print(paste('Duration: ',dur,' h:',sep=''))
+for (tr in unique(treatment))
+{
+print(tr)
+x=abundance[miRNA==miR & duration==dur & treatment==tr]
+if (length(x[!is.na(x)])>=3) # 3 is the minimal accepted number of replicates for Shapiro-Wilm test
+{
+print(shapiro.test(abundance[miRNA==miR & duration==dur & treatment==tr])$p.value)
+} else print("Shapiro-Wilk test not applicable (not enough replicates)")
+}
+print('Variance homogeneity:')
+min_nb_rep=3 # this is the minimal accepted number of replicates for Levene's test
+for (tr in unique(treatment))
+{
+x=abundance[miRNA==miR & duration==dur & treatment==tr]
+if (length(x[!is.na(x)])<min_nb_rep) min_nb_rep=length(x[!is.na(x)])
+}
+if (min_nb_rep>=3)
+{
+print(leveneTest(abundance[miRNA==miR & duration==dur]~treatment[miRNA==miR & duration==dur])$Pr[1])
+} else print("Levene's test not applicable (not enough replicates)")
+print("t-test with homogeneous variances:")
+print(t.test(abundance[miRNA==miR & duration==dur]~treatment[miRNA==miR & duration==dur])$p.value)
+}
+}
+print('')
+print('miR-34a over-expression upon 72h doxorubicin treatment:')
+print(mean(abundance[treatment=="doxorubicin" & duration==72 & miRNA=="miR-34a"])/mean(abundance[treatment=="untreated" & duration==72 & miRNA=="miR-34a"]))
