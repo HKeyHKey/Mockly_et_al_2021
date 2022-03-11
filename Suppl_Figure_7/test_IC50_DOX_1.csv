@@ -1,0 +1,37 @@
+											
+----- General Data -----											
+Measurement	Type: EndPoint, Time: 16/10/2020 / 11:37:11, State: Valid Measurement										
+Template	Template loaded during measurement time : c:\programdata\...\luminescence\lumi_1s.par; Modified template adjustments										
+Files	Data file : test_UC50_DOX_1.dat - 16/10/2020 / 11:39:26 - Operator was Unknown User - Created with Version 5.17										
+	Template file : C:\ProgramData\...\Lumi_1s.par - 04/07/2013 / 09:57:06 - Created by Unknown User - Created with Version 5.16.01										
+Reader	BertholdTech TriStar, Driver Version: 1.07, (1.0.7.0), S/N: 25-1047, Embedded Version: 1.04										
+	Plate Type: Berthold 96 - No:23300/23302										
+	Name .....................  Shake										
+	Duration [s] .............  1.0										
+	Diameter .................  0.1                 Measurement Mode .........  by Well										
+	Name .....................  Measurement										
+	Counting Time [s] ........  1.00                Measurement Mode .........  by Well										
+	Emission Filter ..........  No Filter										
+	Second Measurement .......  No										
+Calculation	Calculation Status : Valid Assay, Calculation Time : 16/10/2020 / 11:39:26										
+Program	MikroWin, Version 5.17; License No. : 115317										
+	Assembly Code A : 0006 0000 0000 0000 0000 FFFF										
+	Assembly Code B : 00E6 F715 C08F FC45 2DC0 B7AF										
+System	Operating System Name : Windows 7 Professional Service Pack 1, 64-bit, System User : commun										
+Printer	Printer Name : \\fuji\fax-rdc										
+											
+----- Threshold Statistics -----											
+Group	Assay	Set	Threshold Limits								
+Group 1	Default	1	+oo > Overload >= 2,1475E9 > #Value >=    0,0000 > _ > -oo								
+											
+											
+											
+16/10/2020	11:37:11										
+0	0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0	0
+640262	616775	689366	472257	251205	106394	4330	31340	31443	39913	3254	103
+688472	685416	731140	499837	287596	106964	3966	35156	36866	41022	3056	111
+647458	627723	596224	400504	241666	100069	2802	31277	29868	30960	3230	95
+587160	636827	641141	479951	275887	98074	3665	23923	31633	30200	1559	79
+0	0	0	0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	0	0	0	0	0

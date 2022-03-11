@@ -1,0 +1,17 @@
+library("drc")
+par(mar = c(5.1, 4.1, 4.1, 2.1))
+DOX_1 <- read.csv("test_IC50_DOX_1.csv",skip = 29, header = F, sep = "\t")
+DOX_1[DOX_1 == 0] = NA
+DOX_1_mean=colMeans(DOX_1, na.rm = T)
+DOX_1_sd=apply(DOX_1, 2, sd, na.rm = T)
+concentration=c(0, 3*10^-9, 1*10^-8, 3*10^-8, 1*10^-7, 3*10^-7, 1*10^-6, 3*10^-6, 1*10^-5, 3*10^-5, 1*10^-4, 3*10^-4)
+model=drm(DOX_1_mean~concentration,fct = LL.3())
+summary(model)
+model$coefficients
+pdf('Supplementary_figure_IC50_DOX.pdf',width=6,height=5)
+plot(model, main="Doxorubicin",xlab="Drug concentration (M)", ylab="Luminescence (RLU)",cex.axis=0.8)
+y=max(DOX_1_mean)/2
+abline(h=y, lty = 3, col="grey")
+abline(v=exp( (log((model$coefficients[2]/y)-1)/model$coefficients[1])+log(model$coefficients[3]) ), lty = 3, col="grey")
+text(concentration[2],min(DOX_1_mean),paste("IC50 = ",round(exp( (log((model$coefficients[2]/y)-1)/model$coefficients[1])+log(model$coefficients[3]) ),10)," M",sep="") )
+dev.off()
