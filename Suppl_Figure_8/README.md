@@ -1,6 +1,6 @@
 ## Flow cytometry data: ##
 
-Raw data: deposited at [Flow repository](https://flowrepository.org/) under accession number ???.
+Raw data: deposited at [Flow repository](https://flowrepository.org/) under accession number ???, and copied here in 
 
 Extracted counts: in files '20220225_flowjo.xls' and '20220228_flowjo.xls'.
 
