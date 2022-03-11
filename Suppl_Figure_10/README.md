@@ -11,7 +11,9 @@ echo "display="$display;sed 's| |_|g' Small_RNA-Seq_in_healthy_human_tissues.tsv
 
 ## Extraction of miRNA read counts and sequencing depths: ##
 
-After download of the 'SRR\*.fastq' files from [SRA](https://www.ncbi.nlm.nih.gov/sra)
+After download of the 'SRR\*.fastq' files from [SRA](https://www.ncbi.nlm.nih.gov/sra):
+
+``./Script_human_tissue_Small_RNA-Seq.sh``
 
 Resulting files: stored in archive 'miRNA_counts_in_human_tissues_and_body_fluids.tar.bz2' for miRNA read counts; summarized in 'Depths.dat' for sequencing depths.
 
