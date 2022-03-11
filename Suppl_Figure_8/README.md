@@ -1,6 +1,6 @@
 ## Flow cytometry data: ##
 
-Raw data: deposited at [Flow repository](https://flowrepository.org/) under accession number ???, and copied here in directory [Flow_cytometry_raw_data](https://github.com/HKeyHKey/Mockly_et_al_2022/tree/main/Suppl_Figure_8/Flow_cytometry_raw_data).
+Raw data: deposited at [Flow repository](https://flowrepository.org/) under accession number ???, and copied here in directory "[Flow_cytometry_raw_data](https://github.com/HKeyHKey/Mockly_et_al_2022/tree/main/Suppl_Figure_8/Flow_cytometry_raw_data)".
 
 Extracted counts: in files '20220225_flowjo.xls' and '20220228_flowjo.xls'.
 
