@@ -1,6 +1,6 @@
 library(plotrix)
 
-##Figure 3D##
+##Figure 4D##
 
 ## Import data
 plate <- read.csv("20210411_dox_HCT116_miR34a_miR21_for_analysis.csv", header = T, sep = ';',dec=",",stringsAsFactors = F)
@@ -68,7 +68,7 @@ summary(aov(var ~ treatment + time_point, stat_table))
 
 
 
-##Figure 3C##
+##Figure 4C##
 
 ## Import data
 plate <- read.csv("20210412_mimic_HCT116_miR34a_for_analysis.csv", header = T, sep = ';',dec=",",stringsAsFactors = F)
