@@ -4,3 +4,12 @@ Small RNA-Seq described in [Isakova et al., 2020](https://www.pnas.org/doi/abs/1
 
 Data files downloaded from [SRA](https://www.ncbi.nlm.nih.gov/sra) using fastq-dump.
 
+## Extraction of miRNA read counts and sequencing depths: ##
+
+``./Script_human_tissue_Small_RNA-Seq.sh``
+
+Resulting files: stored in archive 'miRNA_counts_in_human_tissues_and_body_fluids.tar.bz2' for miRNA read counts; summarized in 'Depths.dat' for sequencing depths.
+
+## Graph tracing: ##
+
+``R CMD BATCH R_commands_plots_miRNA_abundance_in_tissues_bar_graphs``
