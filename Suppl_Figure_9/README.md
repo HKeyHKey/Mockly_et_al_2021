@@ -73,7 +73,7 @@ For U-2 OS cells:
 
 ## Extraction of miRNA read counts and sequencing depths: ##
 
-``for acc in `ls $.fastq | sed 's|\.fastq$||'`;do ./Script_miRNA_abundance.sh $acc;done``
+``for acc in `ls *.fastq | sed 's|\.fastq$||'`;do ./Script_miRNA_abundance.sh $acc;done``
 
 Resulting files: stored in archive 'miRNA_counts_in_human_tissues_and_body_fluids.tar.bz2' for miRNA read counts; summarized in 'Depths.dat' for sequencing depths.
 
