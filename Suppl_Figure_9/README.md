@@ -75,7 +75,7 @@ For U-2 OS cells:
 
 ``for acc in `ls *.fastq | sed 's|\.fastq$||'`;do ./Script_miRNA_abundance.sh $acc;done``
 
-Resulting files: stored in archive 'miRNA_counts_in_human_tissues_and_body_fluids.tar.bz2' for miRNA read counts; summarized in 'Depths.dat' for sequencing depths.
+Resulting files: stored in archive 'miRNA_counts_in_human_cell_lines.tar.bz2' for miRNA read counts; summarized in 'Depths.dat' for sequencing depths.
 
 ## Graph tracing: ##
 
