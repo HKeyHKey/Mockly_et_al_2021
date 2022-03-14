@@ -35,7 +35,10 @@ case "$acc" in "SRR954987"|"SRR954996"|"SRR4235725"|"SRR4235726"|"ERR3173398"|"E
 		"SRR10662084"|"SRR10662083"|"SRR7807315"|"SRR7807314"|"SRR7807313") species='mmu';sample='Testis';;
 esac
 
-directory='/poolzfs/genomes/Homo_sapiens/UCSC/hg38/Sequence/Bowtie2Index/' # Enter here the path to your Bowtie2 indexes
+case "$species" in "hsa") directory='/poolzfs/genomes/Homo_sapiens/UCSC/hg38/Sequence/Bowtie2Index/';; # to be adapted with the location of your Bowtie2 index files
+                   "mmu") directory='/poolzfs/genomes/Mus_musculus/UCSC/mm10/Sequence/Bowtie2Index/';; # to be adapted with the location of your Bowtie2 index files
+esac
+		   
 MIN_LENGTH=18
 MAX_LENGTH=30
 case "$acc" in "SRR954987"|"SRR954996") adapter=ATCTCGTATGCCGTCTTCTGCTTG;;
