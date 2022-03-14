@@ -6,7 +6,7 @@ Data files downloaded from [SRA](https://www.ncbi.nlm.nih.gov/sra) using fastq-d
 
 ## Extraction of miRNA read counts and sequencing depths: ##
 
-``./Script_human_tissue_Small_RNA-Seq.sh``
+``./Script_murine_tissue_Small_RNA-Seq.sh``
 
 Resulting files: stored in archive 'miRNA_counts_in_human_tissues_and_body_fluids.tar.bz2' for miRNA read counts; summarized in 'Depths.dat' for sequencing depths.
 
