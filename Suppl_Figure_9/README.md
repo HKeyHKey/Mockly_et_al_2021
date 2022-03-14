@@ -79,6 +79,4 @@ Resulting files: stored in archive 'miRNA_counts_in_human_tissues_and_body_fluid
 
 ## Graph tracing: ##
 
-``for id in `ls miRNA_count_in_Mapping_SRR* | sed -e 's|miRNA_count_in_Mapping_||' -e 's|\.dat$||'`;do grep -w $id List_of_SRA_runs_for_*;done | sed -e 's|\.txt:SRR[0-9]*$||' -e 's|^List_of_SRA_runs_for_||' | sort | uniq > Human_tissues_with_Small_RNA-Seq;for tissue in `cat Human_tissues_with_Small_RNA-Seq`
-do Rscript R_commands_plots_miRNA_abundance_in_tissues_bar_graphs $tissue `cat List_of_SRA_runs_for_$tissue'.txt' | perl -pe 's/\n/ /g'`
-done``
+``n=`cat Libraries_per_cell_line.tsv | wc -l`;for i in `seq 1 $n`;do name=`head -$i Libraries_per_cell_line.tsv | tail -1 | sed -e 's|\t.*||' -e 's| |_|g'`;Rscript R_commands_plots_miRNA_abundance_in_tissues_bar_graphs $name `head -$i Libraries_per_cell_line.tsv | tail -1 | sed 's|.*\t||'`;done``
