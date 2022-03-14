@@ -10,7 +10,7 @@ Resulting file: 'Small_RNA-Seq_in_healthy_human_tissues.tsv'.
 
 ## Extraction of miRNA read counts and sequencing depths: ##
 
-After download of the 'SRR\*.fastq' files from [SRA](https://www.ncbi.nlm.nih.gov/sra):
+After download of the 'SRR\*.fastq' files from [SRA](https://www.ncbi.nlm.nih.gov/sra) using fastq-dump:
 
 ``./Script_human_tissue_Small_RNA-Seq.sh``
 
