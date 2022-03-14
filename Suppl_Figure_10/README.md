@@ -14,6 +14,8 @@ After download of the 'SRR\*.fastq' files from [SRA](https://www.ncbi.nlm.nih.go
 
 ``./Script_human_tissue_Small_RNA-Seq.sh``
 
+(N.B.: that script uses file 'Annotated_structures_from_hsa_hairpinOct18.dat', generated as described in https://github.com/HKeyHKey/Mockly_et_al_2022/tree/main/Suppl_Figure_9)
+
 Resulting files: stored in archive 'miRNA_counts_in_human_tissues_and_body_fluids.tar.bz2' for miRNA read counts; summarized in 'Depths.dat' for sequencing depths.
 
 ## Graph tracing: ##
