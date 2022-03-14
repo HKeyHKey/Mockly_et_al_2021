@@ -1,52 +1,52 @@
 #!/bin/sh
 
-#counter=0
-#retstart=0
-#n=100000
-#while test $n -eq 100000
-#do wget -O esearch_out_SRA_$counter https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra\&term=Homo%20sapiens%5borgn%5d\(\"Small%20RNA-Seq\"%5ball%20fields%5b%20OR%20\"miRNA-Seq\"%5ball%20fields%5d%20OR%20mirna_seq%5bstrategy%5d%20OR%20ncrna_seq%5bstrategy%5d\)%20public%5baccess%5d%20single%5blayout%5d%20\"filetype%20fastq\"%5bfilter%5d%20transcriptomic%5bsource%5d\&retmax=100000\&retstart=$retstart
-#   retstart=`echo $retstart+100000 | bc`
-#   n=`grep -Pc '^\t*<Id>' esearch_out_SRA_$counter`
-#   counter=`echo $counter"+1" | bc`
-#   sleep 1
-#done
+counter=0
+retstart=0
+n=100000
+while test $n -eq 100000
+do wget -O esearch_out_SRA_$counter https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra\&term=Homo%20sapiens%5borgn%5d\(\"Small%20RNA-Seq\"%5ball%20fields%5b%20OR%20\"miRNA-Seq\"%5ball%20fields%5d%20OR%20mirna_seq%5bstrategy%5d%20OR%20ncrna_seq%5bstrategy%5d\)%20public%5baccess%5d%20single%5blayout%5d%20\"filetype%20fastq\"%5bfilter%5d%20transcriptomic%5bsource%5d\&retmax=100000\&retstart=$retstart
+   retstart=`echo $retstart+100000 | bc`
+   n=`grep -Pc '^\t*<Id>' esearch_out_SRA_$counter`
+   counter=`echo $counter"+1" | bc`
+   sleep 1
+done
 
-#counter=0
-#retstart=0
-#n=100000
-#while test $n -eq 100000
-#do wget -O esearch_out_BioSample_$counter https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=biosample\&term=Homo%20sapiens%5borgn%5d\"biosample%20sra\"%5bfilter%5d\&retmax=100000\&retstart=$retstart
-#   retstart=`echo $retstart+100000 | bc`
-#   n=`grep -Pc '^\t*<Id>' esearch_out_BioSample_$counter`
-#   counter=`echo $counter"+1" | bc`
-#   sleep 1
-#done
+counter=0
+retstart=0
+n=100000
+while test $n -eq 100000
+do wget -O esearch_out_BioSample_$counter https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=biosample\&term=Homo%20sapiens%5borgn%5d\"biosample%20sra\"%5bfilter%5d\&retmax=100000\&retstart=$retstart
+   retstart=`echo $retstart+100000 | bc`
+   n=`grep -Pc '^\t*<Id>' esearch_out_BioSample_$counter`
+   counter=`echo $counter"+1" | bc`
+   sleep 1
+done
 
-#cat esearch_out_SRA_* | grep -P '^\t*<Id>' | sed -e 's|^\t*<Id>||' -e 's|</Id>||' > ID_list_SRA
-#i=1
-#n=200
-#while test $n -eq 200
-#do j=`echo "("$i"-1)*200+1" | bc`
-#   tail -n +$j ID_list_SRA | head -200 > batch_$i
-#   list=`perl -pe 's/\n/,/g' batch_$i | sed 's|,$||'`
-#   wget -O efetch_out_SRA_$i https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=sra\&id=$list
-#   n=`cat batch_$i | wc -l`
-#   i=`echo $i"+1" | bc`
-#   sleep 1
-#done
+cat esearch_out_SRA_* | grep -P '^\t*<Id>' | sed -e 's|^\t*<Id>||' -e 's|</Id>||' > ID_list_SRA
+i=1
+n=200
+while test $n -eq 200
+do j=`echo "("$i"-1)*200+1" | bc`
+   tail -n +$j ID_list_SRA | head -200 > batch_$i
+   list=`perl -pe 's/\n/,/g' batch_$i | sed 's|,$||'`
+   wget -O efetch_out_SRA_$i https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=sra\&id=$list
+   n=`cat batch_$i | wc -l`
+   i=`echo $i"+1" | bc`
+   sleep 1
+done
 
-#cat esearch_out_BioSample_* | grep -P '^\t*<Id>' | sed -e 's|^\t*<Id>||' -e 's|</Id>||' > ID_list_BioSample
-#i=1
-#n=200
-#while test $n -eq 200
-#do j=`echo "("$i"-1)*200+1" | bc`
-#   tail -n +$j ID_list_BioSample | head -200 > batch_$i
-#   list=`perl -pe 's/\n/,/g' batch_$i | sed 's|,$||'`
-#   wget -O efetch_out_BioSample_$i https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=biosample\&id=$list
-#   n=`cat batch_$i | wc -l`
-#   i=`echo $i"+1" | bc`
-#   sleep 1
-#done
+cat esearch_out_BioSample_* | grep -P '^\t*<Id>' | sed -e 's|^\t*<Id>||' -e 's|</Id>||' > ID_list_BioSample
+i=1
+n=200
+while test $n -eq 200
+do j=`echo "("$i"-1)*200+1" | bc`
+   tail -n +$j ID_list_BioSample | head -200 > batch_$i
+   list=`perl -pe 's/\n/,/g' batch_$i | sed 's|,$||'`
+   wget -O efetch_out_BioSample_$i https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=biosample\&id=$list
+   n=`cat batch_$i | wc -l`
+   i=`echo $i"+1" | bc`
+   sleep 1
+done
 
 cat efetch_out_BioSample_* | sed 's|</BioSample>|\
 |g' | grep '<Attribute attribute_name="tissue" harmonized_name="tissue" display_name="tissue">' | grep '<Id db="SRA">' | grep '<Attribute attribute_name="disease" harmonized_name="disease" display_name="disease">' | sed -e 's|.*<Id db="BioSample" is_primary="1">\([A-Z0-9]*\)</Id>.*<Id db="SRA">\([A-Z0-9]*\)</Id>.*<Attribute attribute_name="tissue" harmonized_name="tissue" display_name="tissue">\([^<]*\)</Attribute>.*<Attribute attribute_name="disease" harmonized_name="disease" display_name="disease">\([^<]*\)</Attribute>.*|\1\t\2\t\3\t\4|' -e 's|.*<Id db="BioSample" is_primary="1">\([A-Z0-9]*\)</Id>.*<Id db="SRA">\([A-Z0-9]*\)</Id>.*<Attribute attribute_name="disease" harmonized_name="disease" display_name="disease">\([^<]*\)</Attribute>.*<Attribute attribute_name="tissue" harmonized_name="tissue" display_name="tissue">\([^<]*\)</Attribute>.*|\1\t\2\t\4\t\3|' > Human_tissue_samples_in_BioSample
