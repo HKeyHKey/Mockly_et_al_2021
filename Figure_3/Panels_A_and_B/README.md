@@ -8,7 +8,7 @@ Resulting files: 'hsa\_hairpinOct18.\*' (fasta and Bowtie2 index for human hairp
 
 ##  miRNA quantification: ##
 
-Small RNA-Seq raw data (in fastq format) can be downloaded from [NCBI's SRA database](https://www.ncbi.nlm.nih.gov/sra) under accession number PRJNA695193 (md5sum's of the gzip-compressed files are in 'md5sum_all.txt').
+[Small RNA-Seq raw data](https://www.ncbi.nlm.nih.gov/sra?LinkName=bioproject_sra_all&from_uid=695193) (in fastq format) can be downloaded from [NCBI's SRA database](https://www.ncbi.nlm.nih.gov/sra) under accession number [PRJNA695193](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA695193/) (md5sum's of the gzip-compressed files are in 'md5sum_all.txt').
 
 Analysis of HCT-116 WT and KO clones (note that the SRA dataset also contains Small RNA-Seq data from HAP1 WT and KO clones, which are not shown in the article; they can be analyzed with the same scripts):
 
